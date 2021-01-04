@@ -1,0 +1,42 @@
+# Запустить тест, собрать тестовый бинарник, записать профайлинг процессора и памяти.
+go test -bench . -benchmem -cpuprofile=cpu.out -memprofile=mem.out -memprofilerate=1 . 
+
+# запустить профайлер с ранее сгенерированными данными по процессору
+go tool pprof hw3_bench.test cpu.out 
+
+# посмотреть данные по процессам 
+(pprof) top
+
+# посмотреть данные по конкретной функции
+(pprof) list FastSearch
+
+# визуализировать в браузере в виде блок схемы
+(pprof) web
+
+##
+
+# запустить профайлер с ранее сгенерированными данными по памяти
+go tool pprof hw3_bench.test mem.out
+
+# занятие памяти в конкретный момент времени
+(pprof) top
+
+# количество аллокаций памяти
+(pprof) alloc_space
+(pprof) top
+
+# посмотреть где именно выделалась память
+# (pprof) list funcname
+
+#
+# Покрытие тестами
+#
+
+# Процент покрытия кода
+go test -v -cover
+
+# Сгенерировать данные для визуализации
+go test -v -coverprofile=coverage.out
+
+# Отобразить визуализацию покрытия кода
+go tool cover -html=coverage.out  
